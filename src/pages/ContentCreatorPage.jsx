@@ -1,14 +1,5 @@
 import { useState } from "react";
-
-const API_BASE = "http://localhost:8080/api";
-const api = {
-  post: async (endpoint, body) => {
-    try {
-      const res = await fetch(`${API_BASE}${endpoint}`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
-      return res.ok ? res.json() : null;
-    } catch { return null; }
-  }
-};
+import { api } from "../api";
 
 const empty = { name: "", city: "", state: "", era: "", year: "", category: "", description: "" };
 
@@ -18,9 +9,11 @@ const ContentCreatorPage = ({ user }) => {
 
   const handleSubmit = async () => {
     if (!form.name || !form.city) return;
-    await api.post("/monuments", form);
-    setSubmitted(true);
-    setTimeout(() => { setSubmitted(false); setForm(empty); }, 3000);
+    try {
+      await api.post("/monuments", form);
+      setSubmitted(true);
+      setTimeout(() => { setSubmitted(false); setForm(empty); }, 3000);
+    } catch (e) { console.error(e); }
   };
 
   return (

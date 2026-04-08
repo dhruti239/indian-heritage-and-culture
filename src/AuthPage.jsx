@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { ROLES } from "./data";
-
-const getUsers = () => JSON.parse(localStorage.getItem("bhe_users") || "[]");
-const saveUsers = (users) => localStorage.setItem("bhe_users", JSON.stringify(users));
+import { api } from "./api";
 
 const roleColors = {
   "Cultural Enthusiast": "#FF6B35",
@@ -33,20 +31,20 @@ export default function AuthPage({ onLogin }) {
 
   const set = (k, v) => { setForm(f => ({ ...f, [k]: v })); setError(""); };
 
-  const handleLogin = () => {
-    const user = getUsers().find(u => u.email === form.email && u.password === form.password);
-    if (!user) { setError("Invalid email or password."); return; }
-    onLogin(user);
+  const handleLogin = async () => {
+    try {
+      const user = await api.post("/auth/login", { email: form.email, password: form.password });
+      onLogin(user);
+    } catch (e) { setError(e.message); }
   };
 
-  const handleSignup = () => {
+  const handleSignup = async () => {
     if (!form.name || !form.email || !form.password || !form.confirm) { setError("All fields are required."); return; }
     if (form.password !== form.confirm) { setError("Passwords do not match."); return; }
-    const users = getUsers();
-    if (users.find(u => u.email === form.email)) { setError("Email already registered."); return; }
-    const newUser = { name: form.name, email: form.email, password: form.password, role: selectedRole };
-    saveUsers([...users, newUser]);
-    onLogin(newUser);
+    try {
+      const user = await api.post("/auth/register", { name: form.name, email: form.email, password: form.password, role: selectedRole });
+      onLogin(user);
+    } catch (e) { setError(e.message); }
   };
 
   const color = selectedRole ? roleColors[selectedRole] : "#FF6B35";

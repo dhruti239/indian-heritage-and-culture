@@ -1,15 +1,26 @@
-import { useState } from "react";
-import { MONUMENTS } from "../data";
+import { useState, useEffect } from "react";
 import ImgWithFallback from "../components/ImgWithFallback";
+import { api } from "../api";
 
 const AdminPanel = ({ user }) => {
   const [tab, setTab] = useState("dashboard");
-  const users = [
-    { name: "Priya Sharma",  role: "Cultural Enthusiast", joined: "Jan 2024", tours: 12, status: "active" },
-    { name: "Rajan Mehta",   role: "Content Creator",     joined: "Feb 2024", tours: 8,  status: "active" },
-    { name: "Anita Gupta",   role: "Tour Guide",           joined: "Mar 2024", tours: 24, status: "active" },
-    { name: "Suresh Kumar",  role: "Cultural Enthusiast", joined: "Apr 2024", tours: 5,  status: "inactive" },
-  ];
+  const [users, setUsers] = useState([]);
+  const [monuments, setMonuments] = useState([]);
+
+  useEffect(() => {
+    api.get("/users").then(setUsers).catch(() => {});
+    api.get("/monuments").then(setMonuments).catch(() => {});
+  }, []);
+
+  const deleteUser = async (id) => {
+    await api.delete(`/users/${id}`);
+    setUsers(u => u.filter(x => x.id !== id));
+  };
+
+  const deleteMonument = async (id) => {
+    await api.delete(`/monuments/${id}`);
+    setMonuments(m => m.filter(x => x.id !== id));
+  };
   const stats = [
     { label: "Total Users",    value: "1,248", change: "+12%", up: true },
     { label: "Active Tours",   value: "86",    change: "+5%",  up: true },
@@ -92,23 +103,20 @@ const AdminPanel = ({ user }) => {
           <table style={{ width: "100%", borderCollapse: "collapse" }}>
             <thead>
               <tr style={{ background: "#f9f9f9" }}>
-                {["Name", "Role", "Joined", "Tours", "Status", "Actions"].map(h => (
+                {["Name", "Role", "Email", "Actions"].map(h => (
                   <th key={h} style={{ padding: "12px 20px", textAlign: "left", fontSize: 12, color: "#888", fontWeight: 600 }}>{h}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
-              {users.map((u, i) => (
-                <tr key={i} style={{ borderTop: "1px solid #f5f5f5" }}>
+              {users.map((u) => (
+                <tr key={u.id} style={{ borderTop: "1px solid #f5f5f5" }}>
                   <td style={{ padding: "14px 20px", fontSize: 14, fontWeight: 500, color: "#1a1a2e" }}>{u.name}</td>
                   <td style={{ padding: "14px 20px" }}><span style={{ background: "#FFF5F0", color: "#FF6B35", fontSize: 11, padding: "3px 10px", borderRadius: 10, fontWeight: 600 }}>{u.role}</span></td>
-                  <td style={{ padding: "14px 20px", fontSize: 13, color: "#888" }}>{u.joined}</td>
-                  <td style={{ padding: "14px 20px", fontSize: 13, color: "#333" }}>{u.tours}</td>
-                  <td style={{ padding: "14px 20px" }}><span style={{ background: u.status === "active" ? "#E8F5E9" : "#FEE8E8", color: u.status === "active" ? "#2E7D32" : "#C62828", fontSize: 11, padding: "3px 10px", borderRadius: 10, fontWeight: 600 }}>{u.status}</span></td>
+                  <td style={{ padding: "14px 20px", fontSize: 13, color: "#888" }}>{u.email}</td>
                   <td style={{ padding: "14px 20px" }}>
                     <div style={{ display: "flex", gap: 8 }}>
-                      <button style={{ background: "#f5f5f5", border: "none", borderRadius: 6, padding: "6px 12px", fontSize: 12, cursor: "pointer" }}>Edit</button>
-                      <button style={{ background: "#FFEBEE", border: "none", borderRadius: 6, padding: "6px 12px", fontSize: 12, cursor: "pointer", color: "#EF5350" }}>Remove</button>
+                      <button onClick={() => deleteUser(u.id)} style={{ background: "#FFEBEE", border: "none", borderRadius: 6, padding: "6px 12px", fontSize: 12, cursor: "pointer", color: "#EF5350" }}>Remove</button>
                     </div>
                   </td>
                 </tr>
@@ -120,7 +128,7 @@ const AdminPanel = ({ user }) => {
 
       {tab === "content" && (
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 16 }}>
-          {MONUMENTS.map(m => (
+          {monuments.map(m => (
             <div key={m.id} style={{ background: "#fff", borderRadius: 12, border: "1px solid #f0f0f0", overflow: "hidden" }}>
               <div style={{ height: 120, overflow: "hidden" }}>
                 <ImgWithFallback src={m.thumbnail} alt={m.name} category={m.category} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
@@ -130,7 +138,7 @@ const AdminPanel = ({ user }) => {
                 <div style={{ color: "#888", fontSize: 12, marginBottom: 12 }}>{m.category} · {m.era}</div>
                 <div style={{ display: "flex", gap: 8 }}>
                   <button style={{ flex: 1, background: "#f5f5f5", border: "none", borderRadius: 8, padding: "8px", fontSize: 12, cursor: "pointer", fontWeight: 600 }}>✎ Edit</button>
-                  <button style={{ flex: 1, background: "#FFEBEE", color: "#EF5350", border: "none", borderRadius: 8, padding: "8px", fontSize: 12, cursor: "pointer", fontWeight: 600 }}>🗑 Delete</button>
+                  <button onClick={() => deleteMonument(m.id)} style={{ flex: 1, background: "#FFEBEE", color: "#EF5350", border: "none", borderRadius: 8, padding: "8px", fontSize: 12, cursor: "pointer", fontWeight: 600 }}>🗑 Delete</button>
                 </div>
               </div>
             </div>

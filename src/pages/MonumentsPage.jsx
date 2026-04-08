@@ -1,15 +1,18 @@
-import { useState } from "react";
-import { MONUMENTS } from "../data";
+import { useState, useEffect } from "react";
 import ImgWithFallback from "../components/ImgWithFallback";
+import { api } from "../api";
 
 const MonumentsPage = () => {
+  const [monuments, setMonuments] = useState([]);
   const [selected, setSelected] = useState(null);
   const [filter, setFilter]     = useState("All");
   const [search, setSearch]     = useState("");
   const [favorites, setFavorites] = useState([]);
 
-  const categories = ["All", ...new Set(MONUMENTS.map(m => m.category))];
-  const filtered = MONUMENTS.filter(m =>
+  useEffect(() => { api.get("/monuments").then(setMonuments).catch(() => {}); }, []);
+
+  const categories = ["All", ...new Set(monuments.map(m => m.category))];
+  const filtered = monuments.filter(m =>
     (filter === "All" || m.category === filter) &&
     (m.name.toLowerCase().includes(search.toLowerCase()) || m.state.toLowerCase().includes(search.toLowerCase()))
   );
@@ -35,6 +38,7 @@ const MonumentsPage = () => {
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: 20 }}>
+        {filtered.length === 0 && <p style={{ color: "#888" }}>Loading monuments...</p>}
         {filtered.map(m => (
           <div key={m.id} style={{ background: "#fff", borderRadius: 14, overflow: "hidden", boxShadow: "0 2px 12px rgba(0,0,0,0.07)", border: "1px solid #f0f0f0", transition: "transform 0.2s" }}
             onMouseEnter={e => e.currentTarget.style.transform = "translateY(-4px)"}
