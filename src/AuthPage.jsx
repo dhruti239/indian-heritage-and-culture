@@ -22,7 +22,7 @@ const inp = {
   background: "#fafafa", transition: "border 0.2s",
 };
 
-export default function AuthPage({ onLogin }) {
+export default function AuthPage({ onLogin, onGuest }) {
   const [mode, setMode] = useState("login"); // "login" | "signup" | "role-select"
   const [selectedRole, setSelectedRole] = useState(null);
   const [form, setForm] = useState({ name: "", email: "", password: "", confirm: "" });
@@ -32,6 +32,7 @@ export default function AuthPage({ onLogin }) {
   const set = (k, v) => { setForm(f => ({ ...f, [k]: v })); setError(""); };
 
   const handleLogin = async () => {
+    if (!form.email || !form.password) { setError("All fields are required."); return; }
     try {
       const user = await api.post("/auth/login", { email: form.email, password: form.password });
       onLogin(user);
@@ -42,7 +43,7 @@ export default function AuthPage({ onLogin }) {
     if (!form.name || !form.email || !form.password || !form.confirm) { setError("All fields are required."); return; }
     if (form.password !== form.confirm) { setError("Passwords do not match."); return; }
     try {
-      const user = await api.post("/auth/register", { name: form.name, email: form.email, password: form.password, role: selectedRole });
+      const user = await api.post("/auth/signup", { name: form.name, email: form.email, password: form.password, role: selectedRole });
       onLogin(user);
     } catch (e) { setError(e.message); }
   };
@@ -166,6 +167,12 @@ export default function AuthPage({ onLogin }) {
               <button onClick={handleLogin} style={{ width: "100%", padding: "13px", borderRadius: 10, border: "none", background: "linear-gradient(135deg, #FF6B35, #F7931E)", color: "#fff", fontWeight: 700, fontSize: 15, cursor: "pointer" }}>
                 Sign In →
               </button>
+
+              {onGuest && (
+                <button onClick={onGuest} style={{ width: "100%", padding: "11px", borderRadius: 10, border: "1px solid #e5e7eb", background: "#fafafa", color: "#888", fontWeight: 600, fontSize: 14, cursor: "pointer", marginTop: 10 }}>
+                  Continue as Guest 👀
+                </button>
+              )}
 
               <p style={{ textAlign: "center", marginTop: 20, fontSize: 13, color: "#888" }}>
                 New here?{" "}

@@ -2,8 +2,8 @@ import Icon from "./Icon";
 
 const ROLES = ["Cultural Enthusiast", "Content Creator", "Tour Guide", "Admin"];
 
-const Sidebar = ({ active, setActive, user, onLogout, collapsed, setCollapsed }) => {
-  const { role } = user;
+const Sidebar = ({ active, setActive, user, onLogout, collapsed, setCollapsed, onLoginClick }) => {
+  const role = user?.role;
   const navItems = [
     { id: "home",      label: "Home",          icon: "home" },
     { id: "monuments", label: "Monuments",      icon: "map" },
@@ -15,6 +15,8 @@ const Sidebar = ({ active, setActive, user, onLogout, collapsed, setCollapsed })
     ...(role === "Content Creator" ? [{ id: "create", label: "Create Content", icon: "edit"  }] : []),
     ...(role === "Tour Guide"      ? [{ id: "guide",  label: "Guide Dashboard",icon: "globe" }] : []),
   ];
+
+  const LOCKED = ["quiz", "tours", "admin", "create", "guide"];
 
   return (
     <aside style={{
@@ -46,7 +48,12 @@ const Sidebar = ({ active, setActive, user, onLogout, collapsed, setCollapsed })
             justifyContent: collapsed ? "center" : "flex-start"
           }}>
             <Icon name={item.icon} size={18} color={active === item.id ? "#FF6B35" : "rgba(255,255,255,0.6)"} />
-            {!collapsed && <span style={{ fontSize: 13, fontWeight: active === item.id ? 600 : 400 }}>{item.label}</span>}
+            {!collapsed && (
+              <span style={{ fontSize: 13, fontWeight: active === item.id ? 600 : 400, flex: 1 }}>{item.label}</span>
+            )}
+            {!collapsed && !user && LOCKED.includes(item.id) && (
+              <span style={{ fontSize: 11, opacity: 0.5 }}>🔒</span>
+            )}
           </button>
         ))}
       </nav>
@@ -54,18 +61,22 @@ const Sidebar = ({ active, setActive, user, onLogout, collapsed, setCollapsed })
       {/* User + Logout */}
       {!collapsed && (
         <div style={{ padding: 16, borderTop: "1px solid rgba(255,255,255,0.08)" }}>
-          <div style={{ background: "rgba(255,107,53,0.15)", border: "1px solid rgba(255,107,53,0.3)", borderRadius: 8, padding: "10px 12px", marginBottom: 10 }}>
-            <div style={{ color: "rgba(255,255,255,0.5)", fontSize: 10, marginBottom: 2 }}>LOGGED IN AS</div>
-            <div style={{ color: "#fff", fontSize: 13, fontWeight: 600 }}>{user.name}</div>
-            <div style={{ color: "#FF6B35", fontSize: 11 }}>{role}</div>
-          </div>
-          <button onClick={onLogout} style={{
-            width: "100%", display: "flex", alignItems: "center", gap: 8, padding: "9px 12px",
-            background: "rgba(239,83,80,0.1)", border: "1px solid rgba(239,83,80,0.2)",
-            borderRadius: 8, cursor: "pointer", color: "#EF5350", fontSize: 13, fontWeight: 600
-          }}>
-            <Icon name="logout" size={15} color="#EF5350" /> Sign Out
-          </button>
+          {user ? (
+            <>
+              <div style={{ background: "rgba(255,107,53,0.15)", border: "1px solid rgba(255,107,53,0.3)", borderRadius: 8, padding: "10px 12px", marginBottom: 10 }}>
+                <div style={{ color: "rgba(255,255,255,0.5)", fontSize: 10, marginBottom: 2 }}>LOGGED IN AS</div>
+                <div style={{ color: "#fff", fontSize: 13, fontWeight: 600 }}>{user.name}</div>
+                <div style={{ color: "#FF6B35", fontSize: 11 }}>{role}</div>
+              </div>
+              <button onClick={onLogout} style={{ width: "100%", display: "flex", alignItems: "center", gap: 8, padding: "9px 12px", background: "rgba(239,83,80,0.1)", border: "1px solid rgba(239,83,80,0.2)", borderRadius: 8, cursor: "pointer", color: "#EF5350", fontSize: 13, fontWeight: 600 }}>
+                <Icon name="logout" size={15} color="#EF5350" /> Sign Out
+              </button>
+            </>
+          ) : (
+            <button onClick={onLoginClick} style={{ width: "100%", padding: "10px 12px", background: "linear-gradient(135deg, #FF6B35, #F7931E)", border: "none", borderRadius: 8, cursor: "pointer", color: "#fff", fontSize: 13, fontWeight: 700 }}>
+              Sign In / Register
+            </button>
+          )}
         </div>
       )}
     </aside>
