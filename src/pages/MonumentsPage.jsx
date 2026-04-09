@@ -159,12 +159,12 @@ useEffect(() => { setMonuments(MONUMENTS); }, []); // Use static data to avoid b
                   <div style={{ borderRadius: 14, overflow: "hidden", marginBottom: 20, position: "relative", height: 220, background: "#1a1a2e", display: "flex", alignItems: "center", justifyContent: "center" }}>
                     <ImgWithFallback src={selected.image} alt={selected.tourPoints[tourStep]} category={selected.category} style={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.6 }} />
                     <div style={{ position: "absolute", textAlign: "center" }}>
-                      <div style={{ color: "rgba(255,255,255,0.6)", fontSize: 13, marginBottom: 6 }}>Stop {tourStep + 1} of {selected.tourPoints.length}</div>
-                      <div style={{ color: "#fff", fontSize: 22, fontWeight: 800 }}>{selected.tourPoints[tourStep]}</div>
+                      <div style={{ color: "rgba(255,255,255,0.6)", fontSize: 13, marginBottom: 6 }}>Stop {tourStep + 1} of {selected.tourPoints ? selected.tourPoints.length : 4}</div>
+                      <div style={{ color: "#fff", fontSize: 22, fontWeight: 800 }}>{selected.tourPoints ? selected.tourPoints[tourStep] : 'Tour Stop'}</div>
                     </div>
                   </div>
                   <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 20 }}>
-const tourPoints = selected.tourPoints || ["Main Entrance", "Central Dome/Temple", "Garden/Surroundings", "Historical Plaques & Exit"];
+                    {(selected.tourPoints || ["Main Entrance", "Central Dome/Temple", "Garden/Surroundings", "Historical Plaques & Exit"]).map((pt, i) => (
                       <button key={pt} onClick={() => setTourStep(i)} style={{ display: "flex", alignItems: "center", gap: 12, padding: "12px 16px", borderRadius: 10, border: i === tourStep ? "2px solid #FF6B35" : "1px solid #f0f0f0", background: i === tourStep ? "#FFF5F0" : "#fff", cursor: "pointer", textAlign: "left" }}>
                         <span style={{ width: 28, height: 28, borderRadius: "50%", background: i === tourStep ? "#FF6B35" : i < tourStep ? "#10B981" : "#e5e7eb", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 700, flexShrink: 0 }}>{i < tourStep ? "✓" : i + 1}</span>
                         <span style={{ fontSize: 14, color: i === tourStep ? "#FF6B35" : "#333", fontWeight: i === tourStep ? 600 : 400 }}>{pt}</span>
@@ -173,7 +173,7 @@ const tourPoints = selected.tourPoints || ["Main Entrance", "Central Dome/Temple
                   </div>
                   <div style={{ display: "flex", gap: 12 }}>
                     <button onClick={() => setTourStep(s => Math.max(0, s - 1))} disabled={tourStep === 0} style={{ flex: 1, padding: "11px", borderRadius: 10, border: "1px solid #e5e7eb", background: tourStep === 0 ? "#f9f9f9" : "#fff", color: tourStep === 0 ? "#ccc" : "#333", fontSize: 14, fontWeight: 600, cursor: tourStep === 0 ? "not-allowed" : "pointer" }}>← Previous</button>
-                    <button onClick={() => setTourStep(s => Math.min(selected.tourPoints.length - 1, s + 1))} disabled={tourStep === selected.tourPoints.length - 1} style={{ flex: 1, padding: "11px", borderRadius: 10, border: "none", background: tourStep === selected.tourPoints.length - 1 ? "#f9f9f9" : "linear-gradient(135deg, #FF6B35, #F7931E)", color: tourStep === selected.tourPoints.length - 1 ? "#ccc" : "#fff", fontSize: 14, fontWeight: 600, cursor: tourStep === selected.tourPoints.length - 1 ? "not-allowed" : "pointer" }}>Next →</button>
+                    <button onClick={() => setTourStep(s => Math.min((selected.tourPoints ? selected.tourPoints.length : 4) - 1, s + 1))} disabled={tourStep === (selected.tourPoints ? selected.tourPoints.length : 4) - 1} style={{ flex: 1, padding: "11px", borderRadius: 10, border: "none", background: tourStep === (selected.tourPoints ? selected.tourPoints.length : 4) - 1 ? "#f9f9f9" : "linear-gradient(135deg, #FF6B35, #F7931E)", color: tourStep === (selected.tourPoints ? selected.tourPoints.length : 4) - 1 ? "#ccc" : "#fff", fontSize: 14, fontWeight: 600, cursor: tourStep === (selected.tourPoints ? selected.tourPoints.length : 4) - 1 ? "not-allowed" : "pointer" }}>Next →</button>
                   </div>
                 </div>
               )}
