@@ -60,22 +60,6 @@ const ContentCreatorPage = ({ user }) => {
         </div>
       )}
 
-      <div style={{ background: "#1a1a2e", borderRadius: 14, padding: 24, marginTop: 24 }}>
-        <h3 style={{ color: "#FF6B35", fontSize: 14, fontWeight: 700, marginBottom: 16 }}>Spring Boot API Integration</h3>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
-          {[
-            { label: "Monuments API", endpoint: "GET/POST /api/monuments" },
-            { label: "Tours API",     endpoint: "GET/POST /api/tours" },
-            { label: "Auth Service",  endpoint: "POST /api/auth/login" },
-            { label: "Content Review",endpoint: "PUT /api/content/{id}/review" },
-          ].map(e => (
-            <div key={e.label} style={{ background: "rgba(255,255,255,0.05)", borderRadius: 10, padding: 14 }}>
-              <div style={{ color: "rgba(255,255,255,0.5)", fontSize: 11, marginBottom: 4 }}>{e.label}</div>
-              <code style={{ color: "#FF6B35", fontSize: 12 }}>{e.endpoint}</code>
-            </div>
-          ))}
-        </div>
-      </div>
     </div>
   );
 };

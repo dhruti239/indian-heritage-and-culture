@@ -12,7 +12,7 @@ const MonumentsPage = ({ user, onLoginClick }) => {
   const [tourStep, setTourStep]   = useState(0);
   const [activeTab, setActiveTab] = useState("details");
 
-  useEffect(() => { api.get("/monuments").then(setMonuments).catch(() => setMonuments(MONUMENTS)); }, []);
+useEffect(() => { setMonuments(MONUMENTS); }, []); // Use static data to avoid backend structure issues
 
   const categories = ["All", ...new Set(monuments.map(m => m.category))];
   const filtered = monuments.filter(m =>
@@ -164,7 +164,7 @@ const MonumentsPage = ({ user, onLoginClick }) => {
                     </div>
                   </div>
                   <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 20 }}>
-                    {selected.tourPoints.map((pt, i) => (
+const tourPoints = selected.tourPoints || ["Main Entrance", "Central Dome/Temple", "Garden/Surroundings", "Historical Plaques & Exit"];
                       <button key={pt} onClick={() => setTourStep(i)} style={{ display: "flex", alignItems: "center", gap: 12, padding: "12px 16px", borderRadius: 10, border: i === tourStep ? "2px solid #FF6B35" : "1px solid #f0f0f0", background: i === tourStep ? "#FFF5F0" : "#fff", cursor: "pointer", textAlign: "left" }}>
                         <span style={{ width: 28, height: 28, borderRadius: "50%", background: i === tourStep ? "#FF6B35" : i < tourStep ? "#10B981" : "#e5e7eb", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 700, flexShrink: 0 }}>{i < tourStep ? "✓" : i + 1}</span>
                         <span style={{ fontSize: 14, color: i === tourStep ? "#FF6B35" : "#333", fontWeight: i === tourStep ? 600 : 400 }}>{pt}</span>

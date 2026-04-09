@@ -42,6 +42,8 @@ const ImgWithFallback = ({ src, alt, style, category }) => {
       <img
         src={src}
         alt={alt}
+        crossOrigin="anonymous"
+        referrerPolicy="no-referrer"
         style={{ ...style, display: status === "loading" ? "none" : "block" }}
         onLoad={() => setStatus("loaded")}
         onError={() => setStatus("error")}

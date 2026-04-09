@@ -1,26 +1,51 @@
 import { useState, useEffect } from "react";
 import ImgWithFallback from "../components/ImgWithFallback";
 import { api } from "../api";
+import { MONUMENTS, ROLES } from "../data";
 
 const AdminPanel = ({ user }) => {
   const [tab, setTab] = useState("dashboard");
   const [users, setUsers] = useState([]);
   const [monuments, setMonuments] = useState([]);
+  const [showAddUserModal, setShowAddUserModal] = useState(false);
+  const [newUserForm, setNewUserForm] = useState({name: "", email: "", role: "Content Creator"}); 
+
+  const mockUsers = [
+    {id: 1, name: "Super Admin", role: "Admin", email: "admin@bharat.in"},
+    {id: 2, name: "Priya Sharma", role: "Content Creator", email: "priya@example.com"},
+    {id: 3, name: "Rajesh Guide", role: "Tour Guide", email: "raj@tour.in"}
+  ];
 
   useEffect(() => {
-    api.get("/users").then(setUsers).catch(() => {});
-    api.get("/monuments").then(setMonuments).catch(() => {});
-  }, []);
+    api.get("/users").then(setUsers).catch(() => setUsers(mockUsers));
+    api.get("/monuments").then(setMonuments).catch(() => setMonuments(MONUMENTS));
+  }, []); 
 
   const deleteUser = async (id) => {
-    await api.delete(`/users/${id}`);
+    try {
+      await api.delete(`/users/${id}`);
+    } catch (e) {
+      console.log("Delete failed (no backend?), local update:", e.message);
+    }
     setUsers(u => u.filter(x => x.id !== id));
   };
 
   const deleteMonument = async (id) => {
-    await api.delete(`/monuments/${id}`);
+    try {
+      await api.delete(`/monuments/${id}`);
+    } catch (e) {
+      console.log("Delete failed (no backend?), local update:", e.message);
+    }
     setMonuments(m => m.filter(x => x.id !== id));
   };
+
+  const addUser = () => {
+    const userData = {...newUserForm, id: Date.now() };
+    setUsers(prev => [...prev, userData]);
+    setNewUserForm({name: "", email: "", role: "Content Creator"});
+    setShowAddUserModal(false);
+  };
+
   const stats = [
     { label: "Total Users",    value: "1,248", change: "+12%", up: true },
     { label: "Active Tours",   value: "86",    change: "+5%",  up: true },
@@ -98,7 +123,7 @@ const AdminPanel = ({ user }) => {
         <div style={{ background: "#fff", borderRadius: 14, border: "1px solid #f0f0f0", overflow: "hidden" }}>
           <div style={{ padding: "16px 20px", borderBottom: "1px solid #f0f0f0", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <h3 style={{ margin: 0, fontSize: 15, fontWeight: 700 }}>User Management</h3>
-            <button style={{ background: "#FF6B35", color: "#fff", border: "none", borderRadius: 8, padding: "8px 16px", fontSize: 13, cursor: "pointer", fontWeight: 600 }}>+ Add User</button>
+            <button onClick={() => setShowAddUserModal(true)} style={{ background: "#FF6B35", color: "#fff", border: "none", borderRadius: 8, padding: "8px 16px", fontSize: 13, cursor: "pointer", fontWeight: 600 }}>+ Add User</button>
           </div>
           <table style={{ width: "100%", borderCollapse: "collapse" }}>
             <thead>
@@ -116,13 +141,39 @@ const AdminPanel = ({ user }) => {
                   <td style={{ padding: "14px 20px", fontSize: 13, color: "#888" }}>{u.email}</td>
                   <td style={{ padding: "14px 20px" }}>
                     <div style={{ display: "flex", gap: 8 }}>
-                      <button onClick={() => deleteUser(u.id)} style={{ background: "#FFEBEE", border: "none", borderRadius: 6, padding: "6px 12px", fontSize: 12, cursor: "pointer", color: "#EF5350" }}>Remove</button>
+                      <button onClick={() => { if (window.confirm(`Delete ${u.name}?`)) deleteUser(u.id); }} style={{ background: "#FFEBEE", border: "none", borderRadius: 6, padding: "6px 12px", fontSize: 12, cursor: "pointer", color: "#EF5350" }}>Remove</button>
                     </div>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
+
+          {showAddUserModal && (
+            <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000, padding: 24 }} onClick={() => setShowAddUserModal(false)}>
+              <div style={{ background: "#fff", borderRadius: 16, padding: 24, minWidth: 400, maxWidth: 500 }} onClick={e => e.stopPropagation()}>
+                <h3 style={{ margin: "0 0 20px 0", fontSize: 18, fontWeight: 700, color: "#1a1a2e" }}>Add New User</h3>
+                <div style={{ marginBottom: 16 }}>
+                  <label style={{ display: "block", fontSize: 12, color: "#888", marginBottom: 6 }}>Name</label>
+                  <input value={newUserForm.name} onChange={e => setNewUserForm(p => ({...p, name: e.target.value}))} placeholder="Enter name" style={{ width: "100%", padding: "10px 14px", border: "1px solid #e5e7eb", borderRadius: 10, fontSize: 14, boxSizing: "border-box" }} />
+                </div>
+                <div style={{ marginBottom: 16 }}>
+                  <label style={{ display: "block", fontSize: 12, color: "#888", marginBottom: 6 }}>Email</label>
+                  <input type="email" value={newUserForm.email} onChange={e => setNewUserForm(p => ({...p, email: e.target.value}))} placeholder="user@example.com" style={{ width: "100%", padding: "10px 14px", border: "1px solid #e5e7eb", borderRadius: 10, fontSize: 14, boxSizing: "border-box" }} />
+                </div>
+                <div style={{ marginBottom: 20 }}>
+                  <label style={{ display: "block", fontSize: 12, color: "#888", marginBottom: 6 }}>Role</label>
+                  <select value={newUserForm.role} onChange={e => setNewUserForm(p => ({...p, role: e.target.value}))} style={{ width: "100%", padding: "10px 14px", border: "1px solid #e5e7eb", borderRadius: 10, fontSize: 14 }}>
+                    {ROLES.map(role => <option key={role} value={role}>{role}</option>)}
+                  </select>
+                </div>
+                <div style={{ display: "flex", gap: 12, justifyContent: "flex-end" }}>
+                  <button onClick={() => setShowAddUserModal(false)} style={{ padding: "10px 20px", borderRadius: 8, border: "1px solid #e5e7eb", background: "#fff", color: "#555", cursor: "pointer" }}>Cancel</button>
+                  <button onClick={addUser} disabled={!newUserForm.name || !newUserForm.email} style={{ padding: "10px 20px", borderRadius: 8, background: "#FF6B35", color: "#fff", border: "none", cursor: "pointer", fontWeight: 600 }}>Add User</button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       )}
 
@@ -161,24 +212,6 @@ const AdminPanel = ({ user }) => {
               </div>
             ))}
             <button style={{ background: "linear-gradient(135deg, #FF6B35, #F7931E)", color: "#fff", border: "none", borderRadius: 10, padding: "12px 24px", fontSize: 14, fontWeight: 600, cursor: "pointer" }}>Save Settings</button>
-          </div>
-          <div style={{ background: "#fff", borderRadius: 14, padding: 24, border: "1px solid #f0f0f0" }}>
-            <h3 style={{ fontSize: 15, fontWeight: 700, marginBottom: 16, color: "#1a1a2e" }}>API Integration (Spring Boot)</h3>
-            <div style={{ background: "#1a1a2e", borderRadius: 10, padding: 16, marginBottom: 12 }}>
-              <code style={{ color: "#FF6B35", fontSize: 12 }}>Base URL: http://localhost:8080/api</code>
-            </div>
-            {[
-              { method: "GET",  path: "/monuments",  desc: "Fetch all monuments" },
-              { method: "POST", path: "/monuments",  desc: "Add new monument" },
-              { method: "GET",  path: "/users",      desc: "Fetch all users" },
-              { method: "PUT",  path: "/users/{id}", desc: "Update user role" },
-            ].map(ep => (
-              <div key={ep.path} style={{ display: "flex", gap: 12, alignItems: "center", padding: "8px 0", borderBottom: "1px solid #f5f5f5" }}>
-                <span style={{ background: ep.method === "GET" ? "#E8F5E9" : ep.method === "POST" ? "#E3F2FD" : "#FFF3E0", color: ep.method === "GET" ? "#2E7D32" : ep.method === "POST" ? "#1565C0" : "#E65100", fontSize: 11, padding: "2px 8px", borderRadius: 6, fontWeight: 700, minWidth: 42, textAlign: "center" }}>{ep.method}</span>
-                <code style={{ fontSize: 12, color: "#555", flex: 1 }}>{ep.path}</code>
-                <span style={{ fontSize: 12, color: "#888" }}>{ep.desc}</span>
-              </div>
-            ))}
           </div>
         </div>
       )}
