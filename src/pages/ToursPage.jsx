@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { MONUMENTS } from "../data";
 import ImgWithFallback from "../components/ImgWithFallback";
+import store from "../store";
 
-const ToursPage = () => {
+const ToursPage = ({ user }) => {
   const [activeTour, setActiveTour] = useState(null);
   const [step, setStep]             = useState(0);
   const [chatMessages, setChatMessages] = useState([]);
@@ -14,6 +15,13 @@ const ToursPage = () => {
     const guideMsg = { from: "guide", text: `Great question about ${activeTour?.name}! ${chatInput.toLowerCase().includes("year") ? `Construction began in ${activeTour?.year}.` : `The architectural style here is ${activeTour?.era}, featuring unique design elements.`}` };
     setChatMessages(m => [...m, userMsg, guideMsg]);
     setChatInput("");
+  };
+
+  const startTour = (m) => {
+    if (user) store.trackTourRegistration(user.id, m);
+    setActiveTour(m);
+    setStep(0);
+    setChatMessages([{ from: "guide", text: `Welcome to the virtual tour of ${m.name}! I'm your expert guide. Feel free to ask me anything.` }]);
   };
 
   if (!activeTour) return (
@@ -38,7 +46,7 @@ const ToursPage = () => {
                 <span style={{ background: "#FFF5F0", color: "#FF6B35", fontSize: 11, padding: "3px 10px", borderRadius: 10, fontWeight: 600 }}>{m.era}</span>
                 <span style={{ background: "#f5f5f5", color: "#666", fontSize: 11, padding: "3px 10px", borderRadius: 10 }}>{m.year}</span>
               </div>
-              <button onClick={() => { setActiveTour(m); setStep(0); setChatMessages([{ from: "guide", text: `Welcome to the virtual tour of ${m.name}! I'm your expert guide. Feel free to ask me anything.` }]); }}
+              <button onClick={() => startTour(m)}
                 style={{ width: "100%", background: "linear-gradient(135deg, #FF6B35, #F7931E)", color: "#fff", border: "none", borderRadius: 8, padding: "10px", fontSize: 14, fontWeight: 600, cursor: "pointer" }}>
                 ▶ Start Virtual Tour
               </button>

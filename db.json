@@ -1,0 +1,296 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "Admin User",
+      "email": "admin@example.com",
+      "password": "admin123",
+      "role": "Admin",
+      "pageVisits": {},
+      "toursRegistered": [],
+      "monumentsVisited": []
+    },
+    {
+      "id": 2,
+      "name": "Test Enthusiast",
+      "email": "test@example.com",
+      "password": "123456",
+      "role": "Cultural Enthusiast",
+      "pageVisits": {},
+      "toursRegistered": [],
+      "monumentsVisited": []
+    },
+    {
+      "id": 3,
+      "name": "Content Creator",
+      "email": "creator@example.com",
+      "password": "123456",
+      "role": "Content Creator",
+      "pageVisits": {},
+      "toursRegistered": [],
+      "monumentsVisited": []
+    },
+    {
+      "id": 4,
+      "name": "Tour Guide",
+      "email": "guide@example.com",
+      "password": "123456",
+      "role": "Tour Guide",
+      "pageVisits": {},
+      "toursRegistered": [],
+      "monumentsVisited": []
+    },
+    {
+      "id": 1777352519746,
+      "name": "yasaswi",
+      "email": "yasaswi@gmail.com",
+      "password": "123456",
+      "role": "Cultural Enthusiast",
+      "pageVisits": {
+        "home": 6,
+        "monuments": 2,
+        "culture": 1,
+        "festivals": 1,
+        "quiz": 1,
+        "tours": 1,
+        "enthusiast": 4
+      },
+      "toursRegistered": [
+        {
+          "id": 1,
+          "name": "Taj Mahal",
+          "city": "Agra",
+          "registeredAt": "2026-04-28T05:02:32.168Z"
+        }
+      ],
+      "monumentsVisited": [
+        {
+          "id": 1,
+          "name": "Taj Mahal",
+          "city": "Agra",
+          "visitedAt": "2026-04-28T05:02:07.617Z"
+        }
+      ],
+      "joinedAt": "2026-04-28T05:01:59.746Z"
+    },
+    {
+      "id": 1777355256838,
+      "name": "dhruti",
+      "email": "dhruti@gmail.com",
+      "password": "123456",
+      "role": "Content Creator",
+      "pageVisits": {
+        "home": 8,
+        "monuments": 2,
+        "culture": 3,
+        "festivals": 2,
+        "quiz": 3,
+        "tours": 2,
+        "create": 4
+      },
+      "toursRegistered": [],
+      "monumentsVisited": [],
+      "joinedAt": "2026-04-28T05:47:36.838Z"
+    },
+    {
+      "id": 1777355322306,
+      "name": "sreeja",
+      "email": "sreeja@gmail.com",
+      "password": "123456",
+      "role": "Tour Guide",
+      "pageVisits": {
+        "home": 2,
+        "monuments": 1,
+        "guide": 3,
+        "tours": 1,
+        "quiz": 1
+      },
+      "toursRegistered": [],
+      "monumentsVisited": [],
+      "joinedAt": "2026-04-28T05:48:42.306Z"
+    },
+    {
+      "id": 1777355408417,
+      "name": "aarshu",
+      "email": "aarshu@gmail.com",
+      "password": "123456",
+      "role": "Admin",
+      "pageVisits": {
+        "home": 1,
+        "admin": 1
+      },
+      "toursRegistered": [],
+      "monumentsVisited": [],
+      "joinedAt": "2026-04-28T05:50:08.417Z"
+    }
+  ],
+  "monuments": [
+    {
+      "id": 1,
+      "name": "Taj Mahal",
+      "city": "Agra",
+      "state": "Uttar Pradesh",
+      "era": "Mughal",
+      "year": "1632–1653",
+      "category": "Mausoleum",
+      "image": "https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=1280&q=80",
+      "thumbnail": "https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=400&q=80",
+      "description": "A UNESCO World Heritage Site, the Taj Mahal is an ivory-white marble mausoleum commissioned by Mughal emperor Shah Jahan in memory of his wife Mumtaz Mahal.",
+      "facts": [
+        "22,000 artisans worked on it",
+        "Minarets tilt slightly outward",
+        "Changes color through the day",
+        "Inscribed on 1983 UNESCO list"
+      ],
+      "tourPoints": [
+        "Main Gate (Darwaza-i-Rauza)",
+        "Reflecting Pool",
+        "Main Mausoleum",
+        "Mosque",
+        "Guest House",
+        "Mehtab Bagh"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Hampi Ruins",
+      "city": "Hampi",
+      "state": "Karnataka",
+      "era": "Vijayanagara",
+      "year": "14th–16th Century",
+      "category": "Ancient City",
+      "image": "https://images.unsplash.com/photo-1609920658906-8223bd289001?auto=format&fit=crop&w=1280&q=80",
+      "thumbnail": "https://images.unsplash.com/photo-1609920658906-8223bd289001?auto=format&fit=crop&w=400&q=80",
+      "description": "Once the capital of the Vijayanagara Empire, Hampi is a UNESCO-listed site of over 500 monuments spread over 4,000 acres.",
+      "facts": [
+        "Over 500 monuments",
+        "Former capital of a rich empire",
+        "Tungabhadra River setting",
+        "Dravidian architecture peak"
+      ],
+      "tourPoints": [
+        "Virupaksha Temple",
+        "Vittala Temple",
+        "Stone Chariot",
+        "Queen's Bath",
+        "Lotus Mahal",
+        "Elephant Stables"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Qutub Minar",
+      "city": "Delhi",
+      "state": "Delhi",
+      "era": "Delhi Sultanate",
+      "year": "1193",
+      "category": "Minaret",
+      "image": "https://images.unsplash.com/photo-1587474260584-136574528ed5?auto=format&fit=crop&w=1280&q=80",
+      "thumbnail": "https://images.unsplash.com/photo-1587474260584-136574528ed5?auto=format&fit=crop&w=400&q=80",
+      "description": "The Qutub Minar is a 73-metre tall minaret and UNESCO World Heritage Site, the world's tallest brick minaret.",
+      "facts": [
+        "73 metres tall",
+        "World's tallest brick minaret",
+        "Five distinct storeys",
+        "Built by Qutb ud-Din Aibak"
+      ],
+      "tourPoints": [
+        "Qutub Minar Tower",
+        "Quwwat-ul-Islam Mosque",
+        "Iron Pillar",
+        "Iltutmish's Tomb",
+        "Alai Darwaza",
+        "Alai Minar"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Ajanta Caves",
+      "city": "Aurangabad",
+      "state": "Maharashtra",
+      "era": "Satavahana/Vakataka",
+      "year": "2nd BC – 6th AD",
+      "category": "Rock-cut Caves",
+      "image": "https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=1280&q=80",
+      "thumbnail": "https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=400&q=80",
+      "description": "30 rock-cut Buddhist cave monuments with paintings and sculptures considered masterpieces of Buddhist religious art.",
+      "facts": [
+        "30 rock-cut caves",
+        "UNESCO site since 1983",
+        "Rediscovered in 1819",
+        "Buddhist art masterpieces"
+      ],
+      "tourPoints": [
+        "Cave 1 (Bodhisattva)",
+        "Cave 2 (Mahaparinirvana)",
+        "Cave 9 (Chaitya)",
+        "Cave 16 (Dying Princess)",
+        "Cave 17 (Flying Apsara)",
+        "Cave 26 (Reclining Buddha)"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Mysore Palace",
+      "city": "Mysuru",
+      "state": "Karnataka",
+      "era": "Wadiyar Dynasty",
+      "year": "1912",
+      "category": "Royal Palace",
+      "image": "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=1280&q=80",
+      "thumbnail": "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=400&q=80",
+      "description": "The official residence of the Wadiyar dynasty, illuminated by nearly 100,000 light bulbs during the Dasara festival.",
+      "facts": [
+        "100,000 light bulbs at Dasara",
+        "Indo-Saracenic architecture",
+        "Designed by Henry Irwin",
+        "Second most visited in India"
+      ],
+      "tourPoints": [
+        "Golden Throne Hall",
+        "Durbar Hall",
+        "Ambavilas Palace",
+        "Kalyana Mandapa",
+        "Wrestling Hall",
+        "Museum of Royal Artifacts"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Gateway of India",
+      "city": "Mumbai",
+      "state": "Maharashtra",
+      "era": "British Raj",
+      "year": "1924",
+      "category": "Arch Monument",
+      "image": "https://images.unsplash.com/photo-1529253355930-ddbe423a2ac7?auto=format&fit=crop&w=1280&q=80",
+      "thumbnail": "https://images.unsplash.com/photo-1529253355930-ddbe423a2ac7?auto=format&fit=crop&w=400&q=80",
+      "description": "A 26-metre arch monument built during the British Raj, commemorating the visit of King George V and Queen Mary in 1911.",
+      "facts": [
+        "26 metres tall",
+        "Built in basalt rock",
+        "Last British troops left here",
+        "Indo-Saracenic design"
+      ],
+      "tourPoints": [
+        "Main Arch",
+        "Waterfront Promenade",
+        "Harbour Views",
+        "Cuffe Parade Vista",
+        "Taj Mahal Palace Hotel",
+        "Ferry Jetty"
+      ]
+    },
+    {
+      "name": "konark sun temple",
+      "city": "konark",
+      "state": "odisha",
+      "era": "eastern dynasty",
+      "year": "1250be",
+      "category": "Temple",
+      "description": "it is pretty temple",
+      "id": 7
+    }
+  ],
+  "discussions": []
+}

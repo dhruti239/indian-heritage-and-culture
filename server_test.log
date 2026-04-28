@@ -1,0 +1,6 @@
+
+✅ Backend running at http://localhost:3001
+   Auth:    POST /api/auth/login  |  POST /api/auth/signup
+   Users:   GET  /api/users
+   Data:    GET  /api/monuments
+

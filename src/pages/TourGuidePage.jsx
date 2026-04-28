@@ -1,12 +1,16 @@
 import { useState } from "react";
 import { MONUMENTS } from "../data";
 import ImgWithFallback from "../components/ImgWithFallback";
+import { useActivity } from "../useActivity";
 
 const TourGuidePage = ({ user }) => {
   const [tab, setTab] = useState("my-tours");
   const myTours = MONUMENTS.slice(0, 4).map((m, i) => ({
     ...m, bookings: [8, 12, 5, 15][i], rating: [4.8, 4.6, 4.9, 4.7][i], status: i === 3 ? "upcoming" : "active"
   }));
+
+  const activity = useActivity(user.id);
+  const totalPageVisits = Object.values(activity.pageVisits).reduce((a, b) => a + b, 0);
 
   return (
     <div>
@@ -18,10 +22,10 @@ const TourGuidePage = ({ user }) => {
       {/* Stats */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16, marginBottom: 28 }}>
         {[
-          { label: "Active Tours",    value: "3",   icon: "🌐", color: "#FF6B35" },
-          { label: "Total Bookings",  value: "40",  icon: "📅", color: "#10B981" },
-          { label: "Avg Rating",      value: "4.8", icon: "⭐", color: "#F59E0B" },
-          { label: "Visitors Guided", value: "128", icon: "👥", color: "#8B5CF6" },
+          { label: "Active Tours",    value: "3",              icon: "🌐", color: "#FF6B35" },
+          { label: "Total Bookings",  value: "40",             icon: "📅", color: "#10B981" },
+          { label: "Avg Rating",      value: "4.8",            icon: "⭐", color: "#F59E0B" },
+          { label: "Page Visits",     value: totalPageVisits,  icon: "👁️", color: "#8B5CF6" },
         ].map(s => (
           <div key={s.label} style={{ background: "#fff", borderRadius: 14, padding: "20px 24px", border: "1px solid #f0f0f0", textAlign: "center" }}>
             <div style={{ fontSize: 28, marginBottom: 8 }}>{s.icon}</div>
@@ -33,8 +37,8 @@ const TourGuidePage = ({ user }) => {
 
       {/* Tabs */}
       <div style={{ display: "flex", gap: 4, background: "#f5f5f5", borderRadius: 10, padding: 4, marginBottom: 24, width: "fit-content" }}>
-        {["my-tours", "schedule", "visitors"].map(t => (
-          <button key={t} onClick={() => setTab(t)} style={{ padding: "8px 20px", borderRadius: 8, border: "none", background: tab === t ? "#fff" : "transparent", color: tab === t ? "#FF6B35" : "#888", fontWeight: tab === t ? 700 : 400, fontSize: 13, cursor: "pointer", boxShadow: tab === t ? "0 1px 4px rgba(0,0,0,0.1)" : "none", textTransform: "capitalize" }}>{t.replace("-", " ")}</button>
+        {["my-tours", "schedule", "visitors", "my-activity"].map(t => (
+          <button key={t} onClick={() => setTab(t)} style={{ padding: "8px 20px", borderRadius: 8, border: "none", background: tab === t ? "#fff" : "transparent", color: tab === t ? "#FF6B35" : "#888", fontWeight: tab === t ? 700 : 400, fontSize: 13, cursor: "pointer", boxShadow: tab === t ? "0 1px 4px rgba(0,0,0,0.1)" : "none", textTransform: "capitalize" }}>{t.replace(/-/g, " ")}</button>
         ))}
       </div>
 
@@ -76,10 +80,10 @@ const TourGuidePage = ({ user }) => {
             <h3 style={{ margin: 0, fontSize: 15, fontWeight: 700 }}>Upcoming Schedule</h3>
           </div>
           {[
-            { time: "10:00 AM", date: "Today",    tour: "Taj Mahal",       visitors: 8,  type: "Group" },
-            { time: "2:00 PM",  date: "Today",    tour: "Qutub Minar",     visitors: 5,  type: "Private" },
-            { time: "9:00 AM",  date: "Tomorrow", tour: "Hampi Ruins",     visitors: 12, type: "Group" },
-            { time: "3:00 PM",  date: "Tomorrow", tour: "Ajanta Caves",    visitors: 6,  type: "Group" },
+            { time: "10:00 AM", date: "Today",    tour: "Taj Mahal",    visitors: 8,  type: "Group" },
+            { time: "2:00 PM",  date: "Today",    tour: "Qutub Minar",  visitors: 5,  type: "Private" },
+            { time: "9:00 AM",  date: "Tomorrow", tour: "Hampi Ruins",  visitors: 12, type: "Group" },
+            { time: "3:00 PM",  date: "Tomorrow", tour: "Ajanta Caves", visitors: 6,  type: "Group" },
           ].map((s, i) => (
             <div key={i} style={{ display: "flex", alignItems: "center", gap: 16, padding: "16px 20px", borderBottom: "1px solid #f5f5f5" }}>
               <div style={{ textAlign: "center", minWidth: 70 }}>
@@ -102,10 +106,10 @@ const TourGuidePage = ({ user }) => {
             <h3 style={{ margin: 0, fontSize: 15, fontWeight: 700 }}>Recent Visitor Reviews</h3>
           </div>
           {[
-            { name: "Amit K.",   tour: "Taj Mahal",    rating: 5, comment: "Incredible guide! Very knowledgeable about Mughal history." },
-            { name: "Sara M.",   tour: "Hampi Ruins",  rating: 5, comment: "Best tour experience. Loved the detailed explanations." },
-            { name: "Raj P.",    tour: "Qutub Minar",  rating: 4, comment: "Great tour, very informative and well-paced." },
-            { name: "Meena S.",  tour: "Ajanta Caves", rating: 5, comment: "Absolutely amazing! The guide brought history to life." },
+            { name: "Amit K.",  tour: "Taj Mahal",    rating: 5, comment: "Incredible guide! Very knowledgeable about Mughal history." },
+            { name: "Sara M.",  tour: "Hampi Ruins",  rating: 5, comment: "Best tour experience. Loved the detailed explanations." },
+            { name: "Raj P.",   tour: "Qutub Minar",  rating: 4, comment: "Great tour, very informative and well-paced." },
+            { name: "Meena S.", tour: "Ajanta Caves", rating: 5, comment: "Absolutely amazing! The guide brought history to life." },
           ].map((v, i) => (
             <div key={i} style={{ padding: "16px 20px", borderBottom: "1px solid #f5f5f5" }}>
               <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
@@ -116,6 +120,56 @@ const TourGuidePage = ({ user }) => {
               <div style={{ fontSize: 13, color: "#555", lineHeight: 1.5 }}>{v.comment}</div>
             </div>
           ))}
+        </div>
+      )}
+
+      {tab === "my-activity" && (
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
+          {/* Page visits */}
+          <div style={{ background: "#fff", borderRadius: 14, border: "1px solid #f0f0f0", padding: 20 }}>
+            <h3 style={{ margin: "0 0 16px", fontSize: 15, fontWeight: 700 }}>📊 My Page Visits</h3>
+            {Object.keys(activity.pageVisits).length === 0 ? (
+              <div style={{ color: "#aaa", fontSize: 13, textAlign: "center", padding: "20px 0" }}>No visits tracked yet</div>
+            ) : Object.entries(activity.pageVisits).map(([page, count]) => (
+              <div key={page} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "8px 0", borderBottom: "1px solid #f5f5f5" }}>
+                <span style={{ fontSize: 13, color: "#555", textTransform: "capitalize" }}>{page}</span>
+                <span style={{ background: "#FFF5F0", color: "#FF6B35", fontSize: 12, padding: "2px 10px", borderRadius: 10, fontWeight: 700 }}>{count}x</span>
+              </div>
+            ))}
+          </div>
+
+          {/* Monuments visited */}
+          <div style={{ background: "#fff", borderRadius: 14, border: "1px solid #f0f0f0", padding: 20 }}>
+            <h3 style={{ margin: "0 0 16px", fontSize: 15, fontWeight: 700 }}>🏛️ Monuments I've Visited</h3>
+            {activity.monumentsVisited.length === 0 ? (
+              <div style={{ color: "#aaa", fontSize: 13, textAlign: "center", padding: "20px 0" }}>No monuments visited yet</div>
+            ) : activity.monumentsVisited.map((m, i) => (
+              <div key={m.id} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 0", borderBottom: i < activity.monumentsVisited.length - 1 ? "1px solid #f5f5f5" : "none" }}>
+                <span style={{ fontSize: 18 }}>🏛️</span>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontSize: 13, fontWeight: 600, color: "#1a1a2e" }}>{m.name}</div>
+                  <div style={{ fontSize: 11, color: "#aaa" }}>{new Date(m.visitedAt).toLocaleDateString()}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Tours registered */}
+          <div style={{ background: "#fff", borderRadius: 14, border: "1px solid #f0f0f0", padding: 20, gridColumn: "1 / -1" }}>
+            <h3 style={{ margin: "0 0 16px", fontSize: 15, fontWeight: 700 }}>🌐 Tours I've Registered</h3>
+            {activity.toursRegistered.length === 0 ? (
+              <div style={{ color: "#aaa", fontSize: 13, textAlign: "center", padding: "20px 0" }}>No tours registered yet. Start a Virtual Tour!</div>
+            ) : (
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
+                {activity.toursRegistered.map(t => (
+                  <div key={t.id} style={{ background: "#f9f9f9", borderRadius: 10, padding: "10px 16px" }}>
+                    <div style={{ fontSize: 13, fontWeight: 700, color: "#1a1a2e" }}>{t.name}</div>
+                    <div style={{ fontSize: 11, color: "#aaa", marginTop: 2 }}>{new Date(t.registeredAt).toLocaleDateString()}</div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       )}
     </div>
